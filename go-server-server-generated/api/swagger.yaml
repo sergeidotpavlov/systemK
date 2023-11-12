@@ -1,0 +1,372 @@
+openapi: 3.0.1
+info:
+  title: SystemK
+  description: |-
+    API <br/>
+     Documentation:
+       <ul>
+         <li><a href="https://atlassian.net/wiki/</a></li>
+         <li><a href="https://git.net/f">Git</a></li>
+         <li><a href="https://humansinc.atlassian.net/browse/ORM">Jira</a></li>
+       </ul>
+     <br/>
+     <a href="git .yaml">API Artifact</a><br/>
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: ProductAPI
+  description: Product methods that are available to an external consumer
+paths:
+  /v1/user:
+    get:
+      tags:
+      - ProductAPI
+      - V1
+      summary: Get user
+      description: |
+        return user info
+        <a href="https://atlassian.net/">System architecture</a>
+      operationId: getUserV1
+      parameters:
+      - name: id
+        in: query
+        description: clients id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          x-omitempty: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: |
+            - code: 10000
+              name: InvalidRequestFault
+              message: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+        "500":
+          description: |
+            - code: 5050
+              name: DefaultError
+              message: Undefined error
+              default: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+      x-component-id: bas
+      x-component-tag: v1
+    put:
+      tags:
+      - ProductAPI
+      - V1
+      summary: Update user
+      description: |
+        The process works synchronously\
+        <a href="https:// ">System architecture</a>
+      operationId: updateUserV1
+      parameters:
+      - name: typeId
+        in: query
+        description: type of identifiers
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - userId
+          - customerId
+          - basketId
+          x-omitempty: true
+      - name: id
+        in: query
+        description: clients id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          x-omitempty: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                x-content-type: application/json
+        "400":
+          description: |
+            - code: 10000
+              name: InvalidRequestFault
+              message: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+        "500":
+          description: |
+            - code: 5050
+              name: DefaultError
+              message: Undefined error
+              default: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+      x-component-id: bas
+      x-component-tag: v1
+    post:
+      tags:
+      - ProductAPI
+      - V1
+      summary: Create new user
+      description: |
+        Create new user\
+        <a href="https://atlassian.net/wiki/">System architecture</a>
+      operationId: createUserV1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+        "400":
+          description: |
+            - code: 10000
+              name: InvalidRequestFault
+              message: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+        "500":
+          description: |
+            - code: 5050
+              name: DefaultError
+              message: Undefined error
+              default: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+      x-component-id: bas
+      x-component-tag: v1
+    delete:
+      tags:
+      - ProductAPI
+      - V1
+      summary: delete user
+      description: "delete user \nThe process works synchronously\\\n<a href=\"https://atlassian.net/\"\
+        >System architecture</a>\n"
+      operationId: deleteUserV1
+      parameters:
+      - name: id
+        in: query
+        description: clients id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          x-omitempty: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: |
+            - code: 10000
+              name: InvalidRequestFault
+              message: Invalid input parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+        "500":
+          description: |
+            - code: 5050
+              name: DefaultError
+              message: Undefined error
+              default: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonFault'
+      x-component-id: bas
+      x-component-tag: v1
+components:
+  schemas:
+    CommonFault:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int64
+          x-omitempty: true
+        message:
+          type: string
+          x-omitempty: true
+        service:
+          type: string
+          x-omitempty: true
+        operation:
+          type: string
+          x-omitempty: true
+        product:
+          type: string
+          x-omitempty: true
+        cause:
+          type: object
+          x-omitempty: true
+    UserParams:
+      type: object
+      properties:
+        username:
+          type: string
+          description: логин
+          example: theUser
+        firstName:
+          type: string
+          description: Фамилия*
+          example: John
+        lastName:
+          type: string
+          description: Имя*
+          example: James
+        secondName:
+          type: string
+          description: Отчество
+          example: James
+        birhDate:
+          type: integer
+          description: дата рождения unix time в микросекундах
+          example: 121250185
+        email:
+          type: string
+          description: Электронная почта*
+          example: john@email.com
+        password:
+          type: string
+          description: Пароль храним как хеш
+          example: "12345"
+        phone:
+          type: string
+          description: телефон
+          example: "12345"
+        userStatus:
+          type: string
+          description: User Status
+          example: active
+        d:
+          type: string
+          description: enum род деятельности клиента/компании
+          example: active
+        dd:
+          type: string
+          description: Должность*
+          example: active
+        s3:
+          type: string
+          description: Ссылка на инстанс согласия в s3
+          example: url
+        s32:
+          type: string
+          description: Ссылка для юр.лица
+          example: ??
+      example:
+        dd: active
+        s3: url
+        lastName: James
+        userStatus: active
+        d: active
+        birhDate: 121250185
+        firstName: John
+        password: "12345"
+        s32: ??
+        phone: "12345"
+        email: john@email.com
+        username: theUser
+        secondName: James
+    User:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: уникальный идентификатор клиента
+          format: guid
+          example: 13b744aa-c6f3-4d6e-82d2-dccba265c878
+        params:
+          $ref: '#/components/schemas/UserParams'
+      example:
+        id: 13b744aa-c6f3-4d6e-82d2-dccba265c878
+        params:
+          dd: active
+          s3: url
+          lastName: James
+          userStatus: active
+          d: active
+          birhDate: 121250185
+          firstName: John
+          password: "12345"
+          s32: ??
+          phone: "12345"
+          email: john@email.com
+          username: theUser
+          secondName: James
+    CreateUserRequest:
+      required:
+      - user
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserParams'
+    CreateUserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+      example:
+        user:
+          id: 13b744aa-c6f3-4d6e-82d2-dccba265c878
+          params:
+            dd: active
+            s3: url
+            lastName: James
+            userStatus: active
+            d: active
+            birhDate: 121250185
+            firstName: John
+            password: "12345"
+            s32: ??
+            phone: "12345"
+            email: john@email.com
+            username: theUser
+            secondName: James
